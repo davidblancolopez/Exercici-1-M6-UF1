@@ -2,6 +2,7 @@ package exercici.pkg1.m6.uf1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class GestioNombres {
@@ -20,18 +21,32 @@ public class GestioNombres {
             if (fitxer.length() == 0) {
 
             } else {
-                boolean seguir = true;
-                
+
                 raf.seek(fitxer.length() - 4);
                 int ultimNum = raf.readInt();
-                
-                
+
+                int numeroPrimSeguent = calculNumeroPrim(ultimNum);
+                raf.seek(fitxer.length());
+                raf.writeInt(numeroPrimSeguent);
             }
 
             raf.close();
         } catch (Exception e) {
 
         }
+    }
+
+    public int calculNumeroPrim(int contador) {
+        boolean seguir = true;
+        int num = 0;
+        do {
+            if ((contador + 1) % 2 == 0) {
+                num = contador + 1;
+                seguir = false;
+            }
+            contador++;
+        } while (seguir);
+        return num;
     }
 
     /**
@@ -41,14 +56,17 @@ public class GestioNombres {
      * @return
      * @throws FileNotFoundException
      */
-    public int numeroEnPosicio(int posicio) throws FileNotFoundException {
+    public int numeroEnPosicio(int posicio) throws FileNotFoundException, IOException {
         RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
         int numPrim = 0;
 
-        for (int i = 0; i < (posicio - 1); i++) {
-            raf.readInt(fitxer);
-        }
+        raf.seek(0);
 
+//        for (int i = 0; i < (posicio - 1); i++) {
+//            raf.readInt(fitxer);
+//        }
+
+        raf.close();
         return numPrim;
     }
 
@@ -58,9 +76,11 @@ public class GestioNombres {
      * @return
      * @throws FileNotFoundException
      */
-    public int numerosPrimsTotal() throws FileNotFoundException {
-        RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
-        int total = 0;
+    public long numerosPrimsTotal() throws FileNotFoundException {
+
+        long total = 0;
+
+        total = fitxer.length() / 4;
 
         return total;
     }
@@ -70,9 +90,35 @@ public class GestioNombres {
      *
      * @return
      */
-    public int ultimNumeroPrim() {
+    public int ultimNumeroPrim() throws FileNotFoundException, IOException {
+        RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
         int ultimPrim = 0;
 
+        raf.seek(fitxer.length() - 4);
+        ultimPrim = raf.readInt();
+
+        raf.close();
         return ultimPrim;
+    }
+
+    /**
+     * Poder cercar en el fitxer de primers, els nombres primers existents entre
+     * dos valors donats.
+     * @param num1
+     * @param num2
+     */
+    public void mostrarNumerosEntre2(int num1, int num2) throws FileNotFoundException, IOException {
+        RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
+        
+        raf.seek(0);
+        
+        do{
+            int num = raf.readInt();
+            if (num >= num1) {
+                
+            }
+        }while();
+        
+        raf.close();
     }
 }
