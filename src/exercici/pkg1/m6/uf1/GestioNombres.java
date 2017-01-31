@@ -36,6 +36,12 @@ public class GestioNombres {
         }
     }
 
+    
+    /**
+     * Metode que s'encarrega de realitzar el calcul de numeros prims.
+     * @param contador
+     * @return 
+     */
     public int calculNumeroPrim(int contador) {
         boolean seguir = true;
         int num = 0;
