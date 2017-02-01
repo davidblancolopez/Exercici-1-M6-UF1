@@ -20,7 +20,7 @@ public class GestioNombres {
         RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
         try {
             if (fitxer.length() == 0) {
-
+                
             } else {
 
                 raf.seek(fitxer.length() - 4);
