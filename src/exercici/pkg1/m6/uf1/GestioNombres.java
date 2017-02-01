@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 public class GestioNombres {
 
@@ -36,11 +37,11 @@ public class GestioNombres {
         }
     }
 
-    
     /**
      * Metode que s'encarrega de realitzar el calcul de numeros prims.
+     *
      * @param contador
-     * @return 
+     * @return
      */
     public int calculNumeroPrim(int contador) {
         boolean seguir = true;
@@ -66,11 +67,11 @@ public class GestioNombres {
         RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
         int numPrim = 0;
 
-        raf.seek(0);
+        int posicioNumero = (posicio * 4) - 4;
 
-//        for (int i = 0; i < (posicio - 1); i++) {
-//            raf.readInt(fitxer);
-//        }
+        raf.seek(posicioNumero);
+
+        numPrim = raf.readInt();
 
         raf.close();
         return numPrim;
@@ -110,21 +111,41 @@ public class GestioNombres {
     /**
      * Poder cercar en el fitxer de primers, els nombres primers existents entre
      * dos valors donats.
+     *
      * @param num1
      * @param num2
      */
-    public void mostrarNumerosEntre2(int num1, int num2) throws FileNotFoundException, IOException {
+    public ArrayList mostrarNumerosEntre2(int num1, int num2) throws FileNotFoundException, IOException {
         RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
-        
+
         raf.seek(0);
-        
-        do{
-            int num = raf.readInt();
-            if (num >= num1) {
-                
+        ArrayList entreValores = new ArrayList<>();
+        boolean prim = true;
+        boolean seg = true;
+
+        while (prim) {
+            int comparar = raf.readInt();
+
+            if (num1 >= comparar) {
+                entreValores.add(comparar);
+                while (seg) {
+
+                    int comparar2 = raf.readInt();
+
+                    if (num2 >= comparar2) {
+                        seg = false;
+                    } else {
+                        entreValores.add(comparar);
+                    }
+
+                }
+                prim = false;
             }
-        }while();
-        
+
+        }
         raf.close();
+        
+        
+        return entreValores;
     }
 }
