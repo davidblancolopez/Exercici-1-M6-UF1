@@ -20,7 +20,8 @@ public class GestioNombres {
         RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
         try {
             if (fitxer.length() == 0) {
-                
+                raf.seek(0);
+                raf.writeInt(2);
             } else {
 
                 raf.seek(fitxer.length() - 4);
@@ -43,11 +44,12 @@ public class GestioNombres {
      * @param contador
      * @return
      */
-    public int calculNumeroPrim(int contador) {
+    public int calculNumeroPrim(int contador) throws FileNotFoundException {
+        RandomAccessFile raf = new RandomAccessFile(fitxer, "rw");
         boolean seguir = true;
         int num = 0;
         do {
-            if ((contador + 1) % 2 == 0) {
+            if ((contador) % 2 == 0) {
                 num = contador + 1;
                 seguir = false;
             }
@@ -84,7 +86,7 @@ public class GestioNombres {
      * @throws FileNotFoundException
      */
     public long numerosPrimsTotal() throws FileNotFoundException {
-
+    
         long total = 0;
 
         total = fitxer.length() / 4;
@@ -120,28 +122,17 @@ public class GestioNombres {
 
         raf.seek(0);
         ArrayList entreValores = new ArrayList<>();
-        boolean prim = true;
-        boolean seg = true;
+        boolean condicio = true;
+        
 
-        while (prim) {
-            int comparar = raf.readInt();
-
-            if (num1 >= comparar) {
-                entreValores.add(comparar);
-                while (seg) {
-
-                    int comparar2 = raf.readInt();
-
-                    if (num2 >= comparar2) {
-                        seg = false;
-                    } else {
-                        entreValores.add(comparar);
-                    }
-
-                }
-                prim = false;
+        raf.seek(0);
+        while (condicio) {
+            int numero = raf.readInt();
+            if (numero >= num1 && numero <= num2) {
+                entreValores.add(numero);
+            } else if (numero > num2) {
+                condicio = false;
             }
-
         }
         raf.close();
         
